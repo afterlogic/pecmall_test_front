@@ -1,39 +1,20 @@
 :root {
-  --app-bg-color: #fafafa;
-  --app-gradient: linear-gradient(180deg, #f4ebff 0%, #f7f7f8 38.15%);
+  --app-bg-color: #fff;
   --app-page-bg-color: 'none';
   --app-overlay-color: rgba(12, 17, 29, 0.7);
   --app-overlay-dark-color: rgba(12, 17, 29, 0.8);
   --background-overlay-color: rgba(0, 0, 0, 0.7);
   --modal-backdrop-blur: 16.6px;
   --color-white: #fff;
-  --color-write-09: rgba(255, 255, 255, 0.9);
   --color-black: #000;
+  --color-write-09: rgba(255, 255, 255, 0.9);
   --color-transparent: transparent;
-  --color-nexus-25: #fcfaff;
-  --color-nexus-50: #f9f5ff;
-  --color-nexus-100: #f4ebff;
-  --color-nexus-200: #e9d7fe;
-  --color-nexus-300: #d6bbfb;
-  --color-nexus-400: #b692f6;
-  --color-nexus-500: #9e77ed;
-  --color-nexus-600: #7f56d9;
-  --color-nexus-700: #6941c6;
-  --color-nexus-800: #53389e;
-  --color-nexus-900: #42307d;
-  --color-nexus-950: #2c1c5f;
-  --color-gray-25: #fafafa;
-  --color-gray-50: #f5f5f6;
-  --color-gray-100: #f0f1f1;
-  --color-gray-200: #ececed;
-  --color-gray-300: #cecfd2;
-  --color-gray-400: #94969c;
-  --color-gray-500: #85888e;
-  --color-gray-600: #61646c;
-  --color-gray-700: #333741;
-  --color-gray-800: #1f242f;
-  --color-gray-900: #161b26;
-  --color-gray-950: #0c111d;
+  --color-brand-500: #E4003C;
+  --color-brand-700: #B50030;
+  --color-gray-50: #E7E7E7;
+  --color-gray-100: #E9E9E9;
+  --color-gray-600: #8A8997;
+  --color-gray-800: #373737;
   --color-error-25: #fffbfa;
   --color-error-50: #fef3f2;
   --color-error-100: #fee4e2;
@@ -70,32 +51,4 @@
   --color-success-800: #085d3a;
   --color-success-900: #074d31;
   --color-success-950: #053321;
-  --color-blue-25: #f5f8ff;
-  --color-blue-50: #eff4ff;
-  --color-blue-100: #d1e0ff;
-  --color-blue-200: #b2ccff;
-  --color-blue-300: #84adff;
-  --color-blue-400: #528bff;
-  --color-blue-500: #2970ff;
-  --color-blue-600: #155eef;
-  --color-blue-700: #004eeb;
-  --color-blue-800: #0040c1;
-  --color-blue-900: #00359e;
-  --color-blue-950: #026;
-
-  /* missed in ui kit */
-  --color-indigo-50: #eef4ff;
-  --color-indigo-200: #c7d7fe;
-  --color-indigo-700: #3538cd;
-
-  /* missed in ui kit */
-  --color-gray-75: #f9fafb;
-  --color-gray-225: #e4e7ec;
-  --color-gray-250: #d0d5dd;
-  --color-gray-325: #afb5c0;
-  --color-gray-350: #98a2b3;
-  --color-gray-575: #667085;
-  --color-gray-650: #344054;
-  --color-gray-675: #475467;
-  --color-black900: #101828;
 }

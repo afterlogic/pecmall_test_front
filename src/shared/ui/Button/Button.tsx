@@ -9,36 +9,26 @@ type ButtonProps = React.DetailedHTMLProps<
   HTMLButtonElement
 > & {
   text: string;
-  variant:
-    | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'error'
-    | 'success'
-    | 'primary-light'
-    | 'secondary-filled';
-  size?: 'l' | 'm' | 's';
+  variant: 'primary' | 'secondary';
+  size?: 'l' | 'm';
   loading?: boolean;
   disabled?: boolean;
   leftIcon?: ReactNode | string;
   rightIcon?: ReactNode | string;
   isFullWidth?: boolean;
-  customHeight?: number;
-  customFontSize?: 'font-2xs' | 'font-sm' | 'font-md' | 'font-lg';
+  customClass?: string;
 };
 
-export const Button = ({
+const Button = ({
   text,
   variant = 'primary',
   loading = false,
   disabled = false,
-  size = 'l',
+  size = 'm',
   leftIcon,
   rightIcon,
   isFullWidth = false,
-  className,
-  customFontSize,
-  customHeight,
+  customClass,
   ...props
 }: ButtonProps) => {
   const buttonLeftIcon =
@@ -48,19 +38,11 @@ export const Button = ({
 
   return (
     <button
-      className={cn(
-        'Button',
-        `Button_${variant}`,
-        `Button_size-${size}`,
-        {
-          Button_loading: loading,
-          Button_disabled: disabled,
-          'Button_full-width': isFullWidth,
-        },
-        customFontSize && `Button_${customFontSize}`,
-        className,
-      )}
-      style={{ height: `${customHeight}px` }}
+      className={`${cn('Button', `Button_${variant}`, `Button_size-${size}`, {
+        Button_loading: loading,
+        Button_disabled: disabled,
+        'Button_full-width': isFullWidth,
+      })} ${customClass || ''}`}
       disabled={loading || disabled}
       {...props}
     >
@@ -92,3 +74,5 @@ export const Button = ({
     </button>
   );
 };
+
+export default Button;

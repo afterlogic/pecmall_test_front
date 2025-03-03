@@ -14,7 +14,7 @@ import { useAppSelector } from '@src/store/store';
 
 import Protector, { AuthPropsType } from '../Protector';
 
-const Login = lazy(() => import('../../pages/auth/Login'));
+const SignIn = lazy(() => import('../../pages/auth/SignIn'));
 const Home = lazy(() => import('../../pages/main/Home'));
 
 const Router = () => {
@@ -82,7 +82,7 @@ const withProtection = (rawRoutesArr: RawRouteType[]) => {
 };
 
 const rawAuthRoutes = [
-  { path: '/', component: Login, auth: { isAuthRequired: false } },
+  { path: '/', component: SignIn, auth: { isAuthRequired: false } },
 ];
 
 const rawRoutes = [

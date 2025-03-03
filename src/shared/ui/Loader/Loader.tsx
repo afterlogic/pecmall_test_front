@@ -5,14 +5,14 @@ import styles from './Loader.module.scss';
 
 interface LoaderProps {
   loading?: boolean;
-  variant?: 'primary' | 'secondary' | 'tertiary';
+  variant?: 'primary' | 'secondary';
 }
 
 const cn = classNames.bind(styles);
 
 const Loader: React.FC<LoaderProps> = ({
   loading = true,
-  variant = 'tertiary',
+  variant = 'primary',
 }) => {
   if (!loading) return null;
 

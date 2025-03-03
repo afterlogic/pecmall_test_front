@@ -1,6 +1,6 @@
 import classnames from 'classnames/bind';
+import Button from '@src/shared/ui/Button';
 import { useAppDispatch, useAppSelector } from '@src/store/store';
-import { Button } from '@src/shared/ui/Button';
 import { mainSliceActions } from '@src/store/mainSlice/mainSlice.reducer';
 
 import styles from './Home.module.scss';
