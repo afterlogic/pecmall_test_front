@@ -1,0 +1,7 @@
+@use '../../../shared/styles/mixins' as *;
+@use '../../../shared/styles/fonts.scss' as *;
+@use '../../../shared/styles/variables.scss' as *;
+
+.home {
+  display: flex;
+}

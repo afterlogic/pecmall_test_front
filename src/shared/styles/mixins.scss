@@ -1,0 +1,107 @@
+@use 'fonts' as *;
+@use 'variables' as *;
+@use 'sass:math';
+
+@mixin till($max-width) {
+  @media screen and (max-width: $max-width) {
+    @content;
+  }
+}
+
+@mixin from($min-width) {
+  @media screen and (min-width: $min-width) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @include till($mobile-max) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @include from($desktop) {
+    @content;
+  }
+}
+
+@mixin typography($font-size, $line-height, $letter-spacing: null) {
+  font-size: $font-size;
+  line-height: $line-height;
+
+  @if $letter-spacing {
+    letter-spacing: math.round(
+      (math.div($font-size, 1rem) * 16px) * $letter-spacing
+    );
+  }
+}
+
+@mixin display-2xl {
+  @include typography(
+    $font-size-display-2xl,
+    $line-height-display-2xl,
+    $letter-spacing
+  );
+}
+
+@mixin display-xl {
+  @include typography(
+    $font-size-display-xl,
+    $line-height-display-xl,
+    $letter-spacing
+  );
+}
+
+@mixin display-lg {
+  @include typography(
+    $font-size-display-lg,
+    $line-height-display-lg,
+    $letter-spacing
+  );
+}
+
+@mixin display-md {
+  @include typography(
+    $font-size-display-md,
+    $line-height-display-md,
+    $letter-spacing
+  );
+}
+
+@mixin display-sm {
+  @include typography($font-size-display-sm, $line-height-display-sm);
+}
+
+@mixin display-xs {
+  @include typography($font-size-display-xs, $line-height-display-xs);
+}
+
+@mixin text-xl {
+  @include typography($font-size-text-xl, $line-height-text-xl);
+}
+
+@mixin text-lg($custom-font-size: null, $custom-line-height: null) {
+  @include typography(
+    if($custom-font-size != null, $custom-font-size, $font-size-text-lg),
+    if($custom-line-height != null, $custom-line-height, $line-height-text-lg)
+  );
+}
+
+@mixin text-md {
+  @include typography($font-size-text-md, $line-height-text-md);
+}
+
+@mixin text-sm($custom-font-size: null, $custom-line-height: null) {
+  @include typography(
+    if($custom-font-size != null, $custom-font-size, $font-size-text-sm),
+    if($custom-line-height != null, $custom-line-height, $line-height-text-sm)
+  );
+}
+
+@mixin text-xs($custom-font-size: null, $custom-line-height: null) {
+  @include typography(
+    if($custom-font-size != null, $custom-font-size, $font-size-text-xs),
+    if($custom-line-height != null, $custom-line-height, $line-height-text-xs)
+  );
+}

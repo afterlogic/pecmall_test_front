@@ -1,0 +1,66 @@
+@use '@src/shared/styles/fonts' as *;
+@use '@src/shared/styles/mixins' as *;
+@use '@src/shared/styles/variables' as *;
+
+.toast-message {
+  &__container {
+    display: flex;
+    flex: 1;
+    padding: 16px 42px 16px 52px;
+  }
+
+  &__success {
+    color: var(--color-success-600);
+    background-color: var(--color-success-50);
+    border: 1px solid var(--color-success-500);
+    border-radius: 8px;
+  }
+
+  &__error {
+    color: var(--color-error-600);
+    background-color: var(--color-error-50);
+    border: 1px solid var(--color-error-500);
+    border-radius: 8px;
+  }
+
+  &__warning {
+    color: var(--color-warning-600);
+    background-color: var(--color-warning-50);
+    border: 1px solid var(--color-warning-500);
+    border-radius: 8px;
+  }
+
+  &__info {
+    color: var(--color-gray-600);
+    background-color: var(--color-gray-50);
+    border: 1px solid var(--color-gray-500);
+    border-radius: 8px;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 7px;
+    left: 7px;
+  }
+
+  &__close-icon {
+    cursor: pointer;
+
+    position: absolute;
+    top: 16px;
+    right: 16px;
+
+    width: 20px;
+    height: 20px;
+
+    color: var(--color-gray-700);
+  }
+
+  &__message {
+    font-family: Manrope, Arial, sans-serif;
+    font-weight: $font-weight-regular;
+    text-align: start;
+
+    @include text-md;
+  }
+}

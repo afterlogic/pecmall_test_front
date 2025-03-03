@@ -1,0 +1,46 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  test-and-deploy-optional:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Clean Vite cache
+        run: rm -rf node_modules/.vite
+
+      - name: Clean TypeScript build cache
+        run: npx tsc --build --clean
+
+      - name: Run TypeScript build
+
+        run: npm run build
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run Stylelint
+        run: npm run lint:styles
+
+      - name: Run Prettier
+        run: npm run format -- --check

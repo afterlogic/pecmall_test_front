@@ -1,0 +1,18 @@
+@use '../../styles/variables.scss' as *;
+
+.Toastify {
+  &__toast {
+    width: calc(100% - 32px);
+    min-height: auto;
+    margin-bottom: 25px;
+    padding: 0;
+
+    border-radius: 8px;
+    box-shadow: $shadow-xl;
+  }
+
+  &__toast-container {
+    display: flex;
+    align-items: center;
+  }
+}

@@ -1,0 +1,46 @@
+.Loader {
+  &__loader-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__loader-dot {
+    scale: 0;
+
+    width: 0.4em;
+    height: 0.4em;
+    margin: 0.1em;
+
+    border-radius: 50%;
+
+    animation: loading-spinner 1s ease infinite;
+
+    &_primary {
+      background-color: var(--color-nexus-25);
+    }
+
+    &_secondary {
+      background-color: var(--color-gray-500);
+    }
+
+    &_tertiary {
+      background-color: var(--color-nexus-500);
+    }
+
+    &__text_disable {
+      opacity: 0;
+    }
+  }
+}
+
+@keyframes loading-spinner {
+  50% {
+    scale: 1;
+  }
+}

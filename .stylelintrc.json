@@ -1,0 +1,12 @@
+{
+  "ignoreFiles": ["**/*.jsx", "**/*.tsx", "**/*.ts"],
+  "extends": ["stylelint-config-clean-order", "stylelint-config-standard-scss"],
+  "rules": {
+    "color-function-notation": null,
+    "alpha-value-notation": null,
+    "length-zero-no-unit": null,
+    "declaration-empty-line-before": null,
+    "scss/dollar-variable-pattern": "^([a-z0-9-_|]+)$",
+    "selector-class-pattern": null
+  }
+}
