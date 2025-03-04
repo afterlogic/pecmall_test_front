@@ -50,3 +50,10 @@
     if($custom-line-height != null, $custom-line-height, $line-height-text-md)
   );
 }
+
+@mixin text-sm($custom-font-size: null, $custom-line-height: null) {
+  @include typography(
+    if($custom-font-size != null, $custom-font-size, $font-size-text-sm),
+    if($custom-line-height != null, $custom-line-height, $line-height-text-sm)
+  );
+}
