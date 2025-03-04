@@ -8,6 +8,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &_inline {
+      position: static;
+      transform: none;
+    }
   }
 
   &__loader-dot {

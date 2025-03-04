@@ -14,7 +14,6 @@
   justify-content: center;
 
   width: fit-content;
-  max-width: fit-content;
   padding-block: 8px;
 
   border-radius: 10px;
@@ -35,14 +34,14 @@
     font-family: Manrope, Arial, sans-serif;
     font-weight: $font-weight-medium;
 
-    @include text-lg;
+    @include text-md;
   }
 
   &_size-m {
     height: 40px;
     padding-inline: 12px;
     font-family: Manrope, Arial, sans-serif;
-    font-weight: $font-weight-medium;
+    font-weight: $font-weight-regular;
 
     @include text-md;
   }

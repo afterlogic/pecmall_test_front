@@ -24,7 +24,7 @@ const Button = ({
   variant = 'primary',
   loading = false,
   disabled = false,
-  size = 'm',
+  size = 'l',
   leftIcon,
   rightIcon,
   isFullWidth = false,
