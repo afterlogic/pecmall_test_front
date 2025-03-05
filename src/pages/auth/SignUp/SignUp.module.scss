@@ -2,7 +2,7 @@
 @use '../../../shared/styles/fonts.scss' as *;
 @use '../../../shared/styles/variables.scss' as *;
 
-.sign-in {
+.sign-up {
   overflow: auto;
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@
     justify-content: center;
 
     width: 100%;
-    max-width: 575px;
+    max-width: 1100px;
     padding: 40px;
 
     background-color: var(--color-gray-200);
@@ -50,18 +50,53 @@
     @include text-lg;
   }
 
+  &__description {
+    font-family: Manrope, Arial, sans-serif;
+    font-weight: $font-weight-regular;
+    color: var(--color-gray-600);
+    text-align: start;
+
+    @include text-md;
+  }
+
+  &__user-info-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &__user-type-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
   &__form {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
 
-  &__login-button {
-    width: 200px;
+  &__signup-button {
+    width: 315px;
   }
 
-  &__login-icon {
+  &__signup-icon {
     color: var(--color-white);
+  }
+
+  &__toggle-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    p {
+      font-family: Manrope, Arial, sans-serif;
+      font-weight: $font-weight-regular;
+      color: var(--color-gray-800);
+
+      @include text-md;
+    }
   }
 
   &__actions-wrapper {
@@ -88,8 +123,41 @@
     }
   }
 
+  &__license-text {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    font-family: Manrope, Arial, sans-serif;
+    font-weight: $font-weight-regular;
+    color: var(--color-gray-800);
+
+    @include text-md;
+
+    &_link {
+      cursor: pointer;
+      text-decoration: underline;
+    }
+  }
+
+  &__input-wrapper {
+    display: flex;
+    gap: 30px;
+
+    &_columns {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+
+      span {
+        margin-bottom: 5px;
+      }
+    }
+  }
+
   &__input-container {
-    margin-top: 10px;
+    max-width: 495px;
   }
 
   &__bottom-text {

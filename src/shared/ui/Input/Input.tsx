@@ -139,7 +139,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                   className={cn('input__password-toggle')}
                   onClick={togglePasswordVisibility}
                 >
-                  {showPassword ? <icons.EyeOff /> : <icons.Eye />}
+                  {showPassword ? <icons.Eye /> : <icons.EyeOff />}
                 </button>
               )}
             </div>

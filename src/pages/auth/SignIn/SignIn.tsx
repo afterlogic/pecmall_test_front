@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import classnames from 'classnames/bind';
 import Button from '@src/shared/ui/Button';
 import icons from '@src/assets/icons';
-import { ToggleInput } from '@src/shared/ui/ToggleInput';
 import { Input } from '@src/shared/ui/Input';
-import Logo from '@src/assets/images/pecmall-testovoe.svg';
 import Divider from '@src/shared/ui/Divider';
+import Logo from '@src/assets/images/pecmall-testovoe.svg';
 
 import styles from './SignIn.module.scss';
 
@@ -14,16 +14,17 @@ const cn = classnames.bind(styles);
 const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isRemember, setRemember] = useState(false);
 
-  const handleRememberChange = () => {
-    setRemember((prev) => !prev);
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.info('Submitting:', { email, password, isRemember });
+    console.info('Submitting:', { email, password });
+  };
+
+  const handleSignUp = () => {
+    navigate('/sign-up');
   };
 
   return (
@@ -58,15 +59,6 @@ const SignIn = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <div className={cn('sign-in__remember-wrapper')}>
-            <ToggleInput
-              checked={isRemember}
-              variant="checkbox"
-              onChange={handleRememberChange}
-            />
-            <p>Запомнить меня</p>
-          </div>
-
           <div className={cn('sign-in__actions-wrapper')}>
             <Button
               text="Войти"
@@ -85,7 +77,9 @@ const SignIn = () => {
 
       <div className={cn('sign-in__bottom-text')}>
         <span>Нет аккаунта?</span>
-        <a className={cn('sign-in__bottom-text_link')}>Зарегистрироваться</a>
+        <a className={cn('sign-in__bottom-text_link')} onClick={handleSignUp}>
+          Зарегистрироваться
+        </a>
       </div>
     </div>
   );
