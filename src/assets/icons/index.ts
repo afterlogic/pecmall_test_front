@@ -7,6 +7,7 @@ import Success from './Success';
 import Note from './Note';
 import Eye from './Eye';
 import EyeOff from './EyeOff';
+import ResetPassword from './ResetPassword';
 
 const icons = {
   ArrowUp,
@@ -18,6 +19,7 @@ const icons = {
   Note,
   Eye,
   EyeOff,
+  ResetPassword,
 };
 
 export default icons;

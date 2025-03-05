@@ -16,6 +16,7 @@ import Protector, { AuthPropsType } from '../Protector';
 
 const SignIn = lazy(() => import('../../pages/auth/SignIn'));
 const SignUp = lazy(() => import('../../pages/auth/SignUp'));
+const ResetPassword = lazy(() => import('../../pages/auth/ResetPassword'));
 const Home = lazy(() => import('../../pages/main/Home'));
 
 const Router = () => {
@@ -85,6 +86,11 @@ const withProtection = (rawRoutesArr: RawRouteType[]) => {
 const rawAuthRoutes = [
   { path: '/', component: SignIn, auth: { isAuthRequired: false } },
   { path: '/sign-up', component: SignUp, auth: { isAuthRequired: false } },
+  {
+    path: '/reset-password',
+    component: ResetPassword,
+    auth: { isAuthRequired: false },
+  },
 ];
 
 const rawRoutes = [

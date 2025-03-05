@@ -2,11 +2,11 @@ import { useState } from 'react';
 import classnames from 'classnames/bind';
 import { useNavigate } from 'react-router-dom';
 import Button from '@src/shared/ui/Button';
-import icons from '@src/assets/icons';
-import { ToggleInput } from '@src/shared/ui/ToggleInput';
-import { Input } from '@src/shared/ui/Input';
-import Logo from '@src/assets/images/pecmall-testovoe.svg';
+import ToggleInput from '@src/shared/ui/ToggleInput';
+import Input from '@src/shared/ui/Input';
 import Divider from '@src/shared/ui/Divider';
+import Logo from '@src/assets/images/pecmall-testovoe.svg';
+import icons from '@src/assets/icons';
 
 import styles from './SignUp.module.scss';
 

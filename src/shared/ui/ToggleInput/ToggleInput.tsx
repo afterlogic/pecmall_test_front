@@ -16,7 +16,7 @@ interface ToggleInputProps {
   onChange?: (value: string) => void;
 }
 
-export const ToggleInput: React.FC<ToggleInputProps> = ({
+const ToggleInput: React.FC<ToggleInputProps> = ({
   checked = false,
   disabled = false,
   variant = 'checkbox',
@@ -58,3 +58,5 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
     </label>
   );
 };
+
+export default ToggleInput;

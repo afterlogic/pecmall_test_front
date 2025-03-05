@@ -22,7 +22,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   options?: { value: string; label?: string }[];
 }
 
-export const Input = forwardRef<HTMLInputElement, InputProps>(
+const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       label,
@@ -152,3 +152,5 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 );
 
 Input.displayName = 'Input';
+
+export default Input;

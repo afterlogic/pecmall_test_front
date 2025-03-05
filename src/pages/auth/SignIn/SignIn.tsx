@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import classnames from 'classnames/bind';
 import Button from '@src/shared/ui/Button';
-import icons from '@src/assets/icons';
-import { Input } from '@src/shared/ui/Input';
+import Input from '@src/shared/ui/Input';
 import Divider from '@src/shared/ui/Divider';
 import Logo from '@src/assets/images/pecmall-testovoe.svg';
+import icons from '@src/assets/icons';
 
 import styles from './SignIn.module.scss';
 
@@ -25,6 +25,10 @@ const SignIn = () => {
 
   const handleSignUp = () => {
     navigate('/sign-up');
+  };
+
+  const handleResetPassword = () => {
+    navigate('/reset-password');
   };
 
   return (
@@ -69,7 +73,12 @@ const SignIn = () => {
             />
             <div className={cn('sign-in__forgot-text')}>
               <span>Забыли пароль?</span>
-              <a className={cn('sign-in__forgot-text_link')}>Восстановить</a>
+              <a
+                className={cn('sign-in__forgot-text_link')}
+                onClick={handleResetPassword}
+              >
+                Восстановить
+              </a>
             </div>
           </div>
         </form>
