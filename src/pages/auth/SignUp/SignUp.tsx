@@ -12,12 +12,32 @@ import styles from './SignUp.module.scss';
 
 const cn = classnames.bind(styles);
 
+const regionsMockData = [
+  { value: 'Магаданская область' },
+  { value: 'Москва и пригород' },
+  { value: 'Московская область' },
+  { value: 'Мурманская область' },
+  { value: 'Нижегородская область' },
+  { value: 'Новосибирская область' },
+  { value: 'Омская область' },
+  { value: 'Оренбургская область' },
+  { value: 'Орловская область' },
+  { value: 'Пензенская область' },
+  { value: 'Пермский край' },
+  { value: 'Приморский край' },
+  { value: 'Псковская область' },
+  { value: 'Ростовская область' },
+  { value: 'Рязанская область' },
+  { value: 'Самарская область' },
+];
+
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [fatherName, setFatherName] = useState('');
   const [telephone, setTelephone] = useState('');
+  const [region, setRegion] = useState('');
   const [isAcceptLicense, setAcceptLicense] = useState(false);
   const [isAcceptTerms, setAcceptTerms] = useState(false);
 
@@ -55,6 +75,7 @@ const SignUp = () => {
       isAcceptLicense,
       isAcceptTerms,
       userType,
+      region,
     });
   };
 
@@ -151,6 +172,21 @@ const SignUp = () => {
                 isFullWidth
               />
             </div>
+          </div>
+
+          <div
+            className={cn(
+              'sign-up__input-wrapper_columns',
+              'sign-up__options-container',
+            )}
+          >
+            <span className={cn('sign-up__description')}>Дополнительно</span>
+            <Input
+              placeholder="Выберите регион"
+              type="text"
+              options={regionsMockData}
+              onChange={(e) => setRegion(e.target.value)}
+            />
           </div>
 
           <Divider orientation="horizontal" />

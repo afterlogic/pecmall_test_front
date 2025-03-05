@@ -3,7 +3,6 @@
 @use '../../../shared/styles/variables.scss' as *;
 
 .sign-up {
-  overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -140,6 +139,11 @@
       cursor: pointer;
       text-decoration: underline;
     }
+  }
+
+  &__options-container {
+   max-width: 495px;
+   height: auto;
   }
 
   &__input-wrapper {

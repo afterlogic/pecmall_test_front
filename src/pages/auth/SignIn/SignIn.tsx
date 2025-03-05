@@ -51,6 +51,7 @@ const SignIn = () => {
             placeholder="Электронная почта"
             containerClass={cn('sign-in__input-container')}
             type="email"
+            autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -60,6 +61,7 @@ const SignIn = () => {
             containerClass={cn('sign-in__input-container')}
             type="password"
             value={password}
+            autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
 
