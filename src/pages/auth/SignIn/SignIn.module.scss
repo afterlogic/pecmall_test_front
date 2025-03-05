@@ -3,54 +3,128 @@
 @use '../../../shared/styles/variables.scss' as *;
 
 .sign-in {
+  overflow: auto;
   display: flex;
   flex-direction: column;
+  gap: 30px;
   align-items: center;
   justify-content: center;
 
   width: 100%;
-  height: 100dvh;
+  height: auto;
+  min-height: 100vh;
+
+  &__content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    justify-content: center;
+
+    width: 100%;
+    max-width: 575px;
+    padding: 40px;
+
+    background-color: var(--color-gray-200);
+    border-radius: 20px;
+    box-shadow: $shadow-xl;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__logo-image {
+    width: 156px;
+    height: 38px;
+    object-fit: contain;
+  }
 
   &__title {
-    margin-bottom: 32px;
-
-    @include text-lg;
     font-family: Manrope, Arial, sans-serif;
     font-weight: $font-weight-medium;
     color: var(--color-gray-950);
-  }
-
-  &__description {
-    @include text-md;
-
-    margin: 0 16px;
-    margin-bottom: 24px;
-
-    font-family: Manrope, Arial, sans-serif;
-    font-weight: $font-weight-regular;
-    color: var(--color-gray-700);
     text-align: start;
+
+    @include text-lg;
   }
 
-  &__description-details {
-    display: inline;
-    font-weight: $font-weight-medium;
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
 
   &__login-button {
     width: 200px;
-    margin-block: 24px;
   }
 
   &__login-icon {
     color: var(--color-white);
   }
 
-  &__toggle-container {
-    margin-bottom: 16px;
+  &__remember-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    p {
+      font-family: Manrope, Arial, sans-serif;
+      font-weight: $font-weight-regular;
+      color: var(--color-gray-800);
+
+      @include text-md;
+    }
+  }
+
+  &__actions-wrapper {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  &__forgot-text {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+
+    font-family: Manrope, Arial, sans-serif;
+    font-weight: $font-weight-regular;
+    color: var(--color-gray-800);
+
+    @include text-md;
+
+    &_link {
+      cursor: pointer;
+      color: var(--color-brand-500);
+      text-decoration: underline;
+    }
   }
 
   &__copyright {
     margin-block: 20px;
+  }
+
+  &__input-container {
+    margin-top: 10px;
+  }
+
+  &__bottom-text {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+    font-family: Manrope, Arial, sans-serif;
+    font-weight: $font-weight-regular;
+    color: var(--color-gray-800);
+
+    @include text-md;
+
+    &_link {
+      cursor: pointer;
+      color: var(--color-brand-500);
+      text-decoration: underline;
+    }
   }
 }

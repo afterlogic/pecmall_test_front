@@ -21,6 +21,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   isFullWidth?: boolean;
   options?: { value: string; label?: string }[];
 }
+
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
@@ -38,6 +39,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const id = useId();
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const localRef = useRef<HTMLInputElement | null>(null);
 
     useEffect(() => {
@@ -63,6 +65,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       }
     };
 
+    const togglePasswordVisibility = () => {
+      setShowPassword((prev) => !prev);
+    };
+
     return (
       <div
         className={cn('input__container', {
@@ -80,7 +86,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           })}
         >
           {options ? (
-            <div className={cn('input__content-wrapper')}>
+            <div className={cn('input__options-wrapper')}>
               <input
                 id={id}
                 ref={ref}
@@ -111,15 +117,32 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               )}
             </div>
           ) : (
-            <input
-              id={id}
-              ref={ref}
-              type={type}
-              className={`${cn('input__field', {
-                input__field_error: !!error,
-              })} ${containerClass || ''}`}
-              {...props}
-            />
+            <div className={cn('input__content-wrapper')}>
+              <input
+                id={id}
+                ref={ref}
+                type={
+                  type === 'password'
+                    ? showPassword
+                      ? 'text'
+                      : 'password'
+                    : type
+                }
+                className={`${cn('input__field', {
+                  input__field_error: !!error,
+                })} ${containerClass || ''}`}
+                {...props}
+              />
+              {type === 'password' && (
+                <button
+                  type="button"
+                  className={cn('input__password-toggle')}
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <icons.EyeOff /> : <icons.Eye />}
+                </button>
+              )}
+            </div>
           )}
         </div>
         {error && <span className={cn('input__error-message')}>{error}</span>}
