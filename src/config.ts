@@ -12,7 +12,7 @@ export const isDev = envType === EnvTypeENUM.development;
 export const isProd = envType === EnvTypeENUM.production;
 
 const config = {
-  apiUrl: 'https://api.pecmall.afterlogic.works',
+  apiUrl: 'https://pecmall.afterlogic.works/api',
   maxNumberOfAttempts: 10,
   protocol: 'http://',
   domain: 'localhost:3000',
@@ -20,12 +20,12 @@ const config = {
 
 switch (envType) {
   case EnvTypeENUM.development:
-    config.apiUrl = 'https://api.pecmall.afterlogic.works';
+    config.apiUrl = 'https://pecmall.afterlogic.works/api';
     config.protocol = 'http://';
     config.domain = 'http://dev..com/';
     break;
   case EnvTypeENUM.production:
-    config.apiUrl = 'https://api.pecmall.afterlogic.works';
+    config.apiUrl = 'https://pecmall.afterlogic.works/api/';
     config.protocol = 'http://';
     config.domain = 'http://dev..com/';
     break;

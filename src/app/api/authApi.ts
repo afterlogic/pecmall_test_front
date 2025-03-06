@@ -5,9 +5,9 @@ import type { ResponseType } from './http';
 
 type LoginTokenType = { access_token: string };
 
-const login = async (data: { login: string; password: string }) => {
+const login = async (data: { email: string; password: string }) => {
   const response = await axiosWithoutAuth.post<ResponseType<LoginTokenType>>(
-    'auth/login',
+    '/user/login',
     data,
   );
   helpers.setToken(response.data.access_token);
@@ -16,11 +16,11 @@ const login = async (data: { login: string; password: string }) => {
 };
 
 const getMe = () => {
-  return http.get<ResponseType<{ login: string }>>('/auth/get-me');
+  return http.get<ResponseType<{ login: string }>>('/user/get-me');
 };
 
 const getToken = () => {
-  return http.get<ResponseType<LoginTokenType>>('/auth/refresh');
+  return http.get<ResponseType<LoginTokenType>>('/user/refresh');
 };
 
 export default {

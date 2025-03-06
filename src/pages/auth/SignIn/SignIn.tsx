@@ -81,7 +81,7 @@ const SignIn = () => {
     console.info('Submitting:', values);
     try {
       await auth.login({
-        login: values.email,
+        email: values.email,
         password: values.password,
       });
     } catch (error) {

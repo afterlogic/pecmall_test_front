@@ -1,4 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import {
+  useForm,
+  Controller,
+  FieldErrors,
+  ControllerRenderProps,
+} from 'react-hook-form';
 import classnames from 'classnames/bind';
 import { useNavigate } from 'react-router-dom';
 import Button from '@src/shared/ui/Button';
@@ -13,15 +19,100 @@ import { mockRegions } from './mock-regions';
 
 const cn = classnames.bind(styles);
 
+interface FormValues {
+  email?: string;
+  userName?: string;
+  surname?: string;
+  fatherName?: string;
+  phone?: string;
+  region?: string;
+  isAcceptLicense?: boolean;
+  isAcceptTerms?: boolean;
+}
+
+const validationRules = {
+  email: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.email && !errors.email,
+  userName: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.userName && !errors.userName,
+  surname: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.surname && !errors.surname,
+  fatherName: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.fatherName && !errors.fatherName,
+  phone: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.phone && !errors.phone,
+  region: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.region && !errors.region,
+  isAcceptLicense: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.isAcceptLicense && !errors.isAcceptLicense,
+  isAcceptTerms: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.isAcceptTerms && !errors.isAcceptTerms,
+};
+
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [fatherName, setFatherName] = useState('');
-  const [telephone, setTelephone] = useState('');
-  const [region, setRegion] = useState('');
+  const {
+    handleSubmit,
+    control,
+    watch,
+    // setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      email: '',
+      userName: '',
+      surname: '',
+      fatherName: '',
+      phone: '',
+      region: '',
+      isAcceptLicense: false,
+      isAcceptTerms: false,
+    },
+  });
+
   const [isAcceptLicense, setAcceptLicense] = useState(false);
   const [isAcceptTerms, setAcceptTerms] = useState(false);
+  const [region, setRegion] = useState('');
+
+  const handleEmailChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FormValues, 'email'>,
+  ) => {
+    field.onChange(e.target.value.replace(/\s+/g, ''));
+    clearErrors('email');
+  };
+
+  const handleNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FormValues, 'userName'>,
+  ) => {
+    field.onChange(e.target.value.replace(/\s+/g, ''));
+    clearErrors('userName');
+  };
+
+  const handleSurnameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FormValues, 'surname'>,
+  ) => {
+    field.onChange(e.target.value.replace(/\s+/g, ''));
+    clearErrors('surname');
+  };
+
+  const handleFatherNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FormValues, 'fatherName'>,
+  ) => {
+    field.onChange(e.target.value.replace(/\s+/g, ''));
+    clearErrors('fatherName');
+  };
+
+  const handlePhoneChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FormValues, 'phone'>,
+  ) => {
+    field.onChange(e.target.value.replace(/\s+/g, ''));
+    clearErrors('phone');
+  };
 
   const handleAcceptTermsChange = () => {
     setAcceptTerms((prev) => !prev);
@@ -45,21 +136,40 @@ const SignUp = () => {
     navigate('/');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    console.info('Submitting:', {
-      email,
-      name,
-      surname,
-      fatherName,
-      telephone,
-      isAcceptLicense,
-      isAcceptTerms,
-      userType,
-      region,
-    });
+  const onSubmit = (values: FormValues) => {
+    console.info('Submitting:', values);
   };
+
+  const values = watch();
+
+  const isSubmitEnabled = useMemo(() => {
+    const isEmailValid = validationRules.email(values, errors);
+    const isUserNameValid = validationRules.userName(values, errors);
+    const isSurnameValid = validationRules.surname(values, errors);
+    const isFatherNameValid = validationRules.fatherName(values, errors);
+    const isPhoneValid = validationRules.phone(values, errors);
+    const isRegionValid = validationRules.region(values, errors);
+    const isAcceptLicenseValid = validationRules.isAcceptLicense(
+      values,
+      errors,
+    );
+    const isAcceptTermsValid = validationRules.isAcceptTerms(values, errors);
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePattern = /^(\+7|8)[0-9]{10}$/;
+
+    return (
+      isEmailValid &&
+      isUserNameValid &&
+      isSurnameValid &&
+      isFatherNameValid &&
+      isPhoneValid &&
+      isRegionValid &&
+      isAcceptLicenseValid &&
+      isAcceptTermsValid &&
+      emailPattern.test(values.email) &&
+      phonePattern.test(values.phone)
+    );
+  }, [values, errors]);
 
   return (
     <div className={cn('sign-up')}>
@@ -104,54 +214,111 @@ const SignUp = () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className={cn('sign-up__form')}>
+        <form className={cn('sign-up__form')}>
           <div className={cn('sign-up__input-wrapper')}>
             <div className={cn('sign-up__input-wrapper_columns')}>
               <span className={cn('sign-up__description')}>Личные данные</span>
-              <Input
-                placeholder="Имя"
-                containerClass={cn('sign-up__input-container')}
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                isFullWidth
+              <Controller
+                name="userName"
+                control={control}
+                rules={{ required: 'Обязательное поле' }}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="Имя"
+                    containerClass={cn('sign-up__input-container')}
+                    type="text"
+                    error={errors.userName?.message}
+                    onChange={(e) => handleNameChange(e, field)}
+                    isFullWidth
+                  />
+                )}
               />
-              <Input
-                placeholder="Фамилия"
-                containerClass={cn('sign-up__input-container')}
-                type="text"
-                value={surname}
-                onChange={(e) => setSurname(e.target.value)}
-                isFullWidth
+
+              <Controller
+                name="surname"
+                control={control}
+                rules={{ required: 'Обязательное поле' }}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    containerClass={cn('sign-up__input-container')}
+                    type="text"
+                    error={errors.userName?.message}
+                    isFullWidth
+                    placeholder="Фамилия"
+                    onChange={(e) => handleSurnameChange(e, field)}
+                  />
+                )}
               />
-              <Input
-                placeholder="Отчество"
-                containerClass={cn('sign-up__input-container')}
-                type="text"
-                value={fatherName}
-                onChange={(e) => setFatherName(e.target.value)}
-                isFullWidth
+
+              <Controller
+                name="fatherName"
+                control={control}
+                rules={{ required: 'Обязательное поле' }}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    containerClass={cn('sign-up__input-container')}
+                    type="text"
+                    error={errors.userName?.message}
+                    onChange={(e) => handleFatherNameChange(e, field)}
+                    isFullWidth
+                    placeholder="Отчество"
+                  />
+                )}
               />
             </div>
             <div className={cn('sign-up__input-wrapper_columns')}>
               <span className={cn('sign-up__description')}>
                 Контактные данные
               </span>
-              <Input
-                placeholder="Электоронная почта"
-                containerClass={cn('sign-up__input-container')}
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                isFullWidth
+
+              <Controller
+                name="email"
+                control={control}
+                rules={{
+                  required: 'required',
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: 'Введите корректный email',
+                  },
+                }}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="email"
+                    placeholder="Электронная почта"
+                    containerClass={cn('sign-in__input-container')}
+                    autoComplete="username"
+                    onChange={(e) => handleEmailChange(e, field)}
+                    error={errors.email?.message}
+                    isFullWidth
+                  />
+                )}
               />
-              <Input
-                placeholder="Номер телефона"
-                containerClass={cn('sign-up__input-container')}
-                type="tel"
-                value={telephone}
-                onChange={(e) => setTelephone(e.target.value)}
-                isFullWidth
+
+              <Controller
+                name="phone"
+                control={control}
+                rules={{
+                  required: 'required',
+                  pattern: {
+                    value: /^(\+7|8)[0-9]{10}$/,
+                    message: 'Введите корректный телефон',
+                  },
+                }}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="tel"
+                    placeholder="Номер телефона"
+                    containerClass={cn('sign-in__input-container')}
+                    onChange={(e) => handlePhoneChange(e, field)}
+                    error={errors.email?.message}
+                    isFullWidth
+                  />
+                )}
               />
             </div>
           </div>
@@ -167,6 +334,7 @@ const SignUp = () => {
               placeholder="Выберите регион"
               type="text"
               options={mockRegions}
+              value={region}
               onChange={(e) => setRegion(e.target.value)}
               hasOptionsFilter
             />
@@ -207,6 +375,8 @@ const SignUp = () => {
               customClass={cn('sign-up__signup-button')}
               leftIcon={<icons.Login className={cn('sign-up__signup-icon')} />}
               type="submit"
+              onClick={handleSubmit(onSubmit)}
+              disabled={!isSubmitEnabled}
             />
           </div>
         </form>
