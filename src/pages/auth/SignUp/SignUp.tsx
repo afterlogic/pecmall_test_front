@@ -175,24 +175,33 @@ const SignUp = () => {
       isAcceptTerms,
     });
     try {
-      await authApi.signUp({
+      const payload = {
         userType,
-        region: region,
+        region,
         email: values.email,
         firstName: values.firstName,
         lastName: values.lastName,
         patronimicName: values.patronimicName,
         phone: values.phone,
-        companyData: values.companyData,
-        legalAddress: values.legalAddress,
-      });
+        ...(userType !== false && {
+          companyData: values.companyData,
+          legalAddress: values.legalAddress,
+        }),
+      };
+
+      await authApi.signUp(payload);
+      notify('Регистрация прошла успешно', 'success');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const isBadGatewayError = checkError.isBadGatewayError(error);
       if (isBadGatewayError) {
         notify('Connection error', 'error');
       } else {
-        notify(error.message, 'error');
+        if (checkError.isUserExist(error)) {
+          notify('Пользователь с таким email уже существует', 'error');
+        } else {
+          notify(error.message, 'error');
+        }
       }
     }
   };
@@ -709,7 +718,7 @@ const SignUp = () => {
 
           <div className={cn('sign-up__actions-wrapper')}>
             <Button
-              text="Зарегистрирвоаться"
+              text="Зарегистрироваться"
               variant="primary"
               customClass={cn('sign-up__signup-button')}
               leftIcon={<icons.Login className={cn('sign-up__signup-icon')} />}

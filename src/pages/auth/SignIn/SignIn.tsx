@@ -16,6 +16,8 @@ import icons from '@src/assets/icons';
 import auth from '@src/app/api/authApi';
 import { notify } from '@src/shared/utils/toast';
 import { checkError } from '@src/shared/utils/checkError';
+import { useAppDispatch } from '@src/store/store';
+import { mainSliceActions } from '@src/store/mainSlice/mainSlice.reducer';
 
 import styles from './SignIn.module.scss';
 
@@ -35,6 +37,8 @@ const validationRules = {
 
 const SignIn = () => {
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   const {
     handleSubmit,
@@ -86,6 +90,13 @@ const SignIn = () => {
         email: values.email,
         password: values.password,
       });
+
+      dispatch(
+        mainSliceActions.setUser({
+          email: values.email,
+        }),
+      );
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const isBadGatewayError = checkError.isBadGatewayError(error);

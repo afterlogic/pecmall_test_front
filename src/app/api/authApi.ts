@@ -17,7 +17,7 @@ const login = async (data: { email: string; password: string }) => {
 
 export const resetPassword = async (data: { email: string }) => {
   const response = await axiosWithoutAuth.post<ResponseType>(
-    '/user/reset-password',
+    '/user/resetPassword',
     data,
   );
   return response;
@@ -65,7 +65,7 @@ const signUp = async (data: {
 };
 
 const getMe = () => {
-  return http.get<ResponseType<{ login: string }>>('/user/get-me');
+  return http.get<ResponseType<{ login: string }>>('/user/getMe');
 };
 
 const getToken = () => {
