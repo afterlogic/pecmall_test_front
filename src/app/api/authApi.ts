@@ -3,14 +3,14 @@ import helpers from '@src/shared/utils/helpers';
 import http, { axiosWithoutAuth, updateToken } from './http';
 import type { ResponseType } from './http';
 
-type LoginTokenType = { access_token: string };
+type LoginTokenType = { token: string };
 
 const login = async (data: { email: string; password: string }) => {
   const response = await axiosWithoutAuth.post<ResponseType<LoginTokenType>>(
     '/user/login',
     data,
   );
-  helpers.setToken(response.data.access_token);
+  helpers.setToken(response.data.token);
   updateToken();
   return response;
 };

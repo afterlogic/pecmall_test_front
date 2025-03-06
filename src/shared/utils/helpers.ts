@@ -21,11 +21,11 @@ const logOut = () => {
 const resetAuthToken = async () => {
   try {
     const { data } = await authApi.getToken();
-    if (!data?.access_token) {
+    if (!data?.token) {
       logOut();
       return false;
     }
-    setToken(data.access_token);
+    setToken(data.token);
 
     return true;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
