@@ -3,8 +3,10 @@ export enum EnvTypeENUM {
   production = 'production',
 }
 
-export const envType =
-  process.env.REACT_APP_ENV || process.env.NODE_ENV || EnvTypeENUM.development;
+const envType =
+  import.meta.env.MODE === 'production'
+    ? EnvTypeENUM.production
+    : EnvTypeENUM.development;
 
 export const isDev = envType === EnvTypeENUM.development;
 export const isProd = envType === EnvTypeENUM.production;
