@@ -29,10 +29,11 @@ export const validateUserAuth = (user: IUser | null, auth: AuthPropsType) => {
   if (user && !auth.isAuthRequired) {
     return false;
   }
+  // TODO add some roles
 
-  if ((auth as WithAuthPropsType).roles?.length) {
-    return (auth as WithAuthPropsType).roles.some((role) => user.role === role);
-  }
+  // if ((auth as WithAuthPropsType).roles?.length) {
+  //   return (auth as WithAuthPropsType).roles.some((role) => user.role === role);
+  // }
 
   return true;
 };

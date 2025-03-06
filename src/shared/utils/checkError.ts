@@ -7,6 +7,9 @@ const isBadGatewayError = (error: AxiosError) =>
   error?.response?.status === 500 ||
   error?.message === 'Network Error';
 
+const isUserExist = (error: AxiosError) => error?.response?.status === 409;
+
 export const checkError = {
   isBadGatewayError,
+  isUserExist,
 };
