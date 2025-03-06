@@ -1,23 +1,80 @@
-import { useState } from 'react';
+import { useMemo } from 'react';
+import {
+  useForm,
+  Controller,
+  FieldErrors,
+  ControllerRenderProps,
+} from 'react-hook-form';
 import classnames from 'classnames/bind';
 import Button from '@src/shared/ui/Button';
 import Input from '@src/shared/ui/Input';
 import Divider from '@src/shared/ui/Divider';
 import Logo from '@src/assets/images/pecmall-testovoe.svg';
 import icons from '@src/assets/icons';
+import authApi from '@src/app/api/authApi';
+import { checkError } from '@src/shared/utils/checkError';
+import { notify } from '@src/shared/utils/toast';
 
 import styles from './ResetPassword.module.scss';
 
 const cn = classnames.bind(styles);
 
+interface FormValues {
+  email?: string;
+}
+
+const validationRules = {
+  email: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.email && !errors.email,
+};
+
 const ResetPassword = () => {
-  const [email, setEmail] = useState('');
+  const {
+    handleSubmit,
+    control,
+    watch,
+    clearErrors,
+    formState: { errors },
+  } = useForm<FormValues>({
+    defaultValues: {
+      email: '',
+    },
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    console.info('Submitting:', { email });
+  const handleEmailChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FormValues, 'email'>,
+  ) => {
+    field.onChange(e.target.value.replace(/\s+/g, ''));
+    clearErrors('email');
   };
+
+  const onSubmit = async (values: FormValues) => {
+    console.info('Submitting:', values);
+    try {
+      await authApi.resetPassword({
+        email: values.email,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const isBadGatewayError = checkError.isBadGatewayError(error);
+      if (isBadGatewayError) {
+        notify(error.message, 'error');
+      } else {
+        notify(error.message, 'error');
+      }
+    }
+  };
+
+  const values = watch();
+
+  const isSubmitEnabled = useMemo(() => {
+    const isEmailValid = validationRules.email(values, errors);
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return isEmailValid && emailPattern.test(values.email);
+  }, [values, errors]);
 
   return (
     <div className={cn('reset-password')}>
@@ -36,13 +93,29 @@ const ResetPassword = () => {
           Восстановление пароля
         </span>
 
-        <form onSubmit={handleSubmit} className={cn('reset-password__form')}>
-          <Input
-            placeholder="Электронная почта"
-            containerClass={cn('reset-password__input-container')}
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+        <form className={cn('reset-password__form')}>
+          <Controller
+            name="email"
+            control={control}
+            rules={{
+              required: 'required',
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: 'Введите корректный email',
+              },
+            }}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="email"
+                placeholder="Электронная почта"
+                containerClass={cn('sign-in__input-container')}
+                autoComplete="username"
+                onChange={(e) => handleEmailChange(e, field)}
+                error={errors.email?.message}
+                isFullWidth
+              />
+            )}
           />
 
           <Button
@@ -55,6 +128,8 @@ const ResetPassword = () => {
               />
             }
             type="submit"
+            disabled={!isSubmitEnabled}
+            onClick={handleSubmit(onSubmit)}
           />
         </form>
       </div>

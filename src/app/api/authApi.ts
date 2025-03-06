@@ -15,6 +15,55 @@ const login = async (data: { email: string; password: string }) => {
   return response;
 };
 
+export const resetPassword = async (data: { email: string }) => {
+  const response = await axiosWithoutAuth.post<ResponseType>(
+    '/user/reset-password',
+    data,
+  );
+  return response;
+};
+
+const signUp = async (data: {
+  userType: boolean;
+  email: string;
+  firstName: string;
+  lastName: string;
+  patronimicName: string;
+  phone: string;
+  region: string;
+  companyData?: {
+    companyName: string;
+    inn: string;
+    kpp: string;
+    bank: string;
+    bankCity: string;
+    bik: string;
+    account: string;
+    corrAccount: string;
+    ogrn: string;
+    okpo: string;
+  };
+
+  legalAddress?: {
+    postalCode: string;
+    country: string;
+    region: string;
+    city: string;
+    street: string;
+    houseNumber: string;
+    building: string;
+    apartment: string;
+  };
+}) => {
+  const response = await axiosWithoutAuth.post<ResponseType<LoginTokenType>>(
+    '/user/signup',
+    data,
+  );
+  helpers.setToken(response.data.token);
+  updateToken();
+  return response;
+};
+
 const getMe = () => {
   return http.get<ResponseType<{ login: string }>>('/user/get-me');
 };
@@ -25,6 +74,8 @@ const getToken = () => {
 
 export default {
   login,
+  signUp,
   getMe,
   getToken,
+  resetPassword,
 };

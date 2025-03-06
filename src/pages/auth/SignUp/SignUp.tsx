@@ -13,40 +13,60 @@ import Input from '@src/shared/ui/Input';
 import Divider from '@src/shared/ui/Divider';
 import Logo from '@src/assets/images/pecmall-testovoe.svg';
 import icons from '@src/assets/icons';
+import authApi from '@src/app/api/authApi';
+import { checkError } from '@src/shared/utils/checkError';
+import { notify } from '@src/shared/utils/toast';
 
-import styles from './SignUp.module.scss';
 import { mockRegions } from './mock-regions';
+import styles from './SignUp.module.scss';
 
 const cn = classnames.bind(styles);
 
 interface FormValues {
   email?: string;
-  userName?: string;
-  surname?: string;
-  fatherName?: string;
+  firstName?: string;
+  lastName?: string;
+  patronimicName?: string;
   phone?: string;
   region?: string;
   isAcceptLicense?: boolean;
   isAcceptTerms?: boolean;
+  companyData?: {
+    companyName: string;
+    inn: string;
+    kpp: string;
+    bank: string;
+    bankCity: string;
+    bik: string;
+    account: string;
+    corrAccount: string;
+    ogrn: string;
+    okpo: string;
+  };
+
+  legalAddress?: {
+    postalCode: string;
+    country: string;
+    region: string;
+    city: string;
+    street: string;
+    houseNumber: string;
+    building: string;
+    apartment: string;
+  };
 }
 
 const validationRules = {
   email: (values: FormValues, errors: FieldErrors<FormValues>) =>
     !!values.email && !errors.email,
-  userName: (values: FormValues, errors: FieldErrors<FormValues>) =>
-    !!values.userName && !errors.userName,
-  surname: (values: FormValues, errors: FieldErrors<FormValues>) =>
-    !!values.surname && !errors.surname,
-  fatherName: (values: FormValues, errors: FieldErrors<FormValues>) =>
-    !!values.fatherName && !errors.fatherName,
+  firstName: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.firstName && !errors.firstName,
+  lastName: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.lastName && !errors.lastName,
+  patronimicName: (values: FormValues, errors: FieldErrors<FormValues>) =>
+    !!values.patronimicName && !errors.patronimicName,
   phone: (values: FormValues, errors: FieldErrors<FormValues>) =>
     !!values.phone && !errors.phone,
-  region: (values: FormValues, errors: FieldErrors<FormValues>) =>
-    !!values.region && !errors.region,
-  isAcceptLicense: (values: FormValues, errors: FieldErrors<FormValues>) =>
-    !!values.isAcceptLicense && !errors.isAcceptLicense,
-  isAcceptTerms: (values: FormValues, errors: FieldErrors<FormValues>) =>
-    !!values.isAcceptTerms && !errors.isAcceptTerms,
 };
 
 const SignUp = () => {
@@ -54,22 +74,41 @@ const SignUp = () => {
     handleSubmit,
     control,
     watch,
-    // setError,
     clearErrors,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
-      userName: '',
-      surname: '',
-      fatherName: '',
+      firstName: '',
+      lastName: '',
+      patronimicName: '',
       phone: '',
-      region: '',
-      isAcceptLicense: false,
-      isAcceptTerms: false,
+      companyData: {
+        companyName: '',
+        inn: '',
+        kpp: '',
+        bank: '',
+        bankCity: '',
+        bik: '',
+        account: '',
+        corrAccount: '',
+        ogrn: '',
+        okpo: '',
+      },
+      legalAddress: {
+        postalCode: '',
+        country: '',
+        region: '',
+        city: '',
+        street: '',
+        houseNumber: '',
+        building: '',
+        apartment: '',
+      },
     },
   });
 
+  const [userType, setUserType] = useState(false);
   const [isAcceptLicense, setAcceptLicense] = useState(false);
   const [isAcceptTerms, setAcceptTerms] = useState(false);
   const [region, setRegion] = useState('');
@@ -78,56 +117,48 @@ const SignUp = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'email'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
+    field.onChange(e.target.value.trim());
     clearErrors('email');
   };
 
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'userName'>,
+    field: ControllerRenderProps<FormValues, 'firstName'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
-    clearErrors('userName');
+    field.onChange(e.target.value.trim());
+    clearErrors('firstName');
   };
 
   const handleSurnameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'surname'>,
+    field: ControllerRenderProps<FormValues, 'lastName'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
-    clearErrors('surname');
+    field.onChange(e.target.value.trim());
+    clearErrors('lastName');
   };
 
   const handleFatherNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'fatherName'>,
+    field: ControllerRenderProps<FormValues, 'patronimicName'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
-    clearErrors('fatherName');
+    field.onChange(e.target.value.trim());
+    clearErrors('patronimicName');
   };
 
   const handlePhoneChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'phone'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
+    field.onChange(e.target.value.trim());
     clearErrors('phone');
   };
 
   const handleAcceptTermsChange = () => {
-    setAcceptTerms((prev) => !prev);
+    setAcceptTerms(!isAcceptTerms);
   };
 
   const handleAcceptLicenseChange = () => {
-    setAcceptLicense((prev) => !prev);
-  };
-
-  const [userType, setUserType] = useState<'individual' | 'company'>(
-    'individual',
-  );
-
-  const handleUserTypeChange = (userType: 'individual' | 'company') => {
-    setUserType(userType);
+    setAcceptLicense(!isAcceptLicense);
   };
 
   const navigate = useNavigate();
@@ -136,26 +167,68 @@ const SignUp = () => {
     navigate('/');
   };
 
-  const onSubmit = (values: FormValues) => {
-    console.info('Submitting:', values);
+  const onSubmit = async (values: FormValues) => {
+    console.info('Submitting:', values, {
+      region,
+      userType,
+      isAcceptLicense,
+      isAcceptTerms,
+    });
+    try {
+      await authApi.signUp({
+        userType,
+        region: region,
+        email: values.email,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        patronimicName: values.patronimicName,
+        phone: values.phone,
+        companyData: values.companyData,
+        legalAddress: values.legalAddress,
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const isBadGatewayError = checkError.isBadGatewayError(error);
+      if (isBadGatewayError) {
+        notify('Connection error', 'error');
+      } else {
+        notify(error.message, 'error');
+      }
+    }
   };
 
   const values = watch();
 
   const isSubmitEnabled = useMemo(() => {
     const isEmailValid = validationRules.email(values, errors);
-    const isUserNameValid = validationRules.userName(values, errors);
-    const isSurnameValid = validationRules.surname(values, errors);
-    const isFatherNameValid = validationRules.fatherName(values, errors);
+    const isUserNameValid = validationRules.firstName(values, errors);
+    const isSurnameValid = validationRules.lastName(values, errors);
+    const isFatherNameValid = validationRules.patronimicName(values, errors);
     const isPhoneValid = validationRules.phone(values, errors);
-    const isRegionValid = validationRules.region(values, errors);
-    const isAcceptLicenseValid = validationRules.isAcceptLicense(
-      values,
-      errors,
-    );
-    const isAcceptTermsValid = validationRules.isAcceptTerms(values, errors);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phonePattern = /^(\+7|8)[0-9]{10}$/;
+
+    const needExtendData =
+      userType === true
+        ? values.companyData.companyName &&
+          values.companyData.inn &&
+          values.companyData.kpp &&
+          values.companyData.bank &&
+          values.companyData.bankCity &&
+          values.companyData.bik &&
+          values.companyData.account &&
+          values.companyData.corrAccount &&
+          values.companyData.ogrn &&
+          values.companyData.okpo &&
+          values.legalAddress.postalCode &&
+          values.legalAddress.country &&
+          values.legalAddress.region &&
+          values.legalAddress.city &&
+          values.legalAddress.street &&
+          values.legalAddress.houseNumber &&
+          values.legalAddress.building &&
+          values.legalAddress.apartment
+        : true;
 
     return (
       isEmailValid &&
@@ -163,13 +236,13 @@ const SignUp = () => {
       isSurnameValid &&
       isFatherNameValid &&
       isPhoneValid &&
-      isRegionValid &&
-      isAcceptLicenseValid &&
-      isAcceptTermsValid &&
+      isAcceptLicense &&
+      isAcceptTerms &&
       emailPattern.test(values.email) &&
-      phonePattern.test(values.phone)
+      phonePattern.test(values.phone) &&
+      needExtendData
     );
-  }, [values, errors]);
+  }, [values, errors, userType, isAcceptLicense, isAcceptTerms]);
 
   return (
     <div className={cn('sign-up')}>
@@ -190,23 +263,20 @@ const SignUp = () => {
           <div className={cn('sign-up__user-type-wrapper')}>
             <div className={cn('sign-up__toggle-wrapper')}>
               <ToggleInput
-                checked={userType === 'individual'}
-                variant="radio"
-                name="userType"
-                value="individual"
-                onChange={() => handleUserTypeChange('individual')}
                 containerClass={cn('sign-in__toggle-container')}
+                variant="checkbox"
+                checked={userType === false}
+                onChange={() => setUserType(false)}
               />
 
               <p>Физическое лицо</p>
             </div>
             <div className={cn('sign-up__toggle-wrapper')}>
               <ToggleInput
-                checked={userType === 'company'}
-                variant="radio"
-                name="userType"
-                value="company"
-                onChange={() => handleUserTypeChange('company')}
+                containerClass={cn('sign-in__toggle-container')}
+                variant="checkbox"
+                checked={userType === true}
+                onChange={() => setUserType(true)}
               />
 
               <p>Юридическое лицо</p>
@@ -219,7 +289,7 @@ const SignUp = () => {
             <div className={cn('sign-up__input-wrapper_columns')}>
               <span className={cn('sign-up__description')}>Личные данные</span>
               <Controller
-                name="userName"
+                name="firstName"
                 control={control}
                 rules={{ required: 'Обязательное поле' }}
                 render={({ field }) => (
@@ -228,7 +298,7 @@ const SignUp = () => {
                     placeholder="Имя"
                     containerClass={cn('sign-up__input-container')}
                     type="text"
-                    error={errors.userName?.message}
+                    error={errors.firstName?.message}
                     onChange={(e) => handleNameChange(e, field)}
                     isFullWidth
                   />
@@ -236,7 +306,7 @@ const SignUp = () => {
               />
 
               <Controller
-                name="surname"
+                name="lastName"
                 control={control}
                 rules={{ required: 'Обязательное поле' }}
                 render={({ field }) => (
@@ -244,7 +314,7 @@ const SignUp = () => {
                     {...field}
                     containerClass={cn('sign-up__input-container')}
                     type="text"
-                    error={errors.userName?.message}
+                    error={errors.firstName?.message}
                     isFullWidth
                     placeholder="Фамилия"
                     onChange={(e) => handleSurnameChange(e, field)}
@@ -253,7 +323,7 @@ const SignUp = () => {
               />
 
               <Controller
-                name="fatherName"
+                name="patronimicName"
                 control={control}
                 rules={{ required: 'Обязательное поле' }}
                 render={({ field }) => (
@@ -261,7 +331,7 @@ const SignUp = () => {
                     {...field}
                     containerClass={cn('sign-up__input-container')}
                     type="text"
-                    error={errors.userName?.message}
+                    error={errors.firstName?.message}
                     onChange={(e) => handleFatherNameChange(e, field)}
                     isFullWidth
                     placeholder="Отчество"
@@ -290,7 +360,7 @@ const SignUp = () => {
                     type="email"
                     placeholder="Электронная почта"
                     containerClass={cn('sign-in__input-container')}
-                    autoComplete="username"
+                    autoComplete="firstName"
                     onChange={(e) => handleEmailChange(e, field)}
                     error={errors.email?.message}
                     isFullWidth
@@ -335,9 +405,278 @@ const SignUp = () => {
               type="text"
               options={mockRegions}
               value={region}
-              onChange={(e) => setRegion(e.target.value)}
+              onSelected={setRegion}
               hasOptionsFilter
             />
+          </div>
+          <div className={cn('sign-up__input-wrapper')}>
+            {userType === true && (
+              <div className={cn('sign-up__input-wrapper_columns')}>
+                <span className={cn('sign-up__description')}>
+                  Данные о компании
+                </span>
+                <Controller
+                  name="companyData.companyName"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Название компании"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.account"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Номер счета"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.bank"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Название банка"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.bankCity"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Город банка"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.bik"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="БИК"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.corrAccount"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Корреспондентский счет"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.inn"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="ИНН"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.kpp"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="КПП"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.ogrn"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="ОГРН"
+                    />
+                  )}
+                />
+                <Controller
+                  name="companyData.okpo"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="ОКПО"
+                    />
+                  )}
+                />
+              </div>
+            )}
+
+            {userType === true && (
+              <div className={cn('sign-up__input-wrapper_columns')}>
+                <span className={cn('sign-up__description')}>
+                  Юридический адрес
+                </span>
+                <Controller
+                  name="legalAddress.apartment"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Квартира"
+                    />
+                  )}
+                />
+                <Controller
+                  name="legalAddress.building"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Строение"
+                    />
+                  )}
+                />
+                <Controller
+                  name="legalAddress.city"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Город"
+                    />
+                  )}
+                />
+                <Controller
+                  name="legalAddress.country"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Страна"
+                    />
+                  )}
+                />
+                <Controller
+                  name="legalAddress.houseNumber"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Дом"
+                    />
+                  )}
+                />
+                <Controller
+                  name="legalAddress.postalCode"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Почтовый индекс"
+                    />
+                  )}
+                />
+                <Controller
+                  name="legalAddress.region"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Регион"
+                    />
+                  )}
+                />
+                <Controller
+                  name="legalAddress.street"
+                  control={control}
+                  rules={{ required: 'Обязательное поле' }}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      containerClass={cn('sign-up__input-container')}
+                      type="text"
+                      isFullWidth
+                      placeholder="Улица"
+                    />
+                  )}
+                />
+              </div>
+            )}
           </div>
 
           <Divider orientation="horizontal" />

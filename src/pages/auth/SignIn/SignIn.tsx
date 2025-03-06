@@ -14,6 +14,8 @@ import Divider from '@src/shared/ui/Divider';
 import Logo from '@src/assets/images/pecmall-testovoe.svg';
 import icons from '@src/assets/icons';
 import auth from '@src/app/api/authApi';
+import { notify } from '@src/shared/utils/toast';
+import { checkError } from '@src/shared/utils/checkError';
 
 import styles from './SignIn.module.scss';
 
@@ -84,10 +86,15 @@ const SignIn = () => {
         email: values.email,
         password: values.password,
       });
-    } catch (error) {
-      console.error(error);
-      setError('email', { message: 'Неверные данные' });
-      setError('password', { message: 'Неверные данные' });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const isBadGatewayError = checkError.isBadGatewayError(error);
+      if (isBadGatewayError) {
+        notify(error.message, 'error');
+      } else {
+        setError('email', { message: 'Неверные данные' });
+        setError('password', { message: 'Неверные данные' });
+      }
     }
   };
 
