@@ -5,6 +5,8 @@ import {
   useId,
   useRef,
   useState,
+  useDeferredValue,
+  useMemo,
 } from 'react';
 import classNames from 'classnames/bind';
 import icons from '@src/assets/icons';
@@ -14,12 +16,13 @@ import style from './Input.module.scss';
 const cn = classNames.bind(style);
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  onSelected?: (value: string) => void;
   label?: string;
   error?: string;
   containerClass?: string;
   isFullWidth?: boolean;
   options?: { value: string; label?: string }[];
+  hasOptionsFilter?: boolean;
+  onSelected?: (value: string) => void;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -31,6 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       type = 'text',
       containerClass,
       options,
+      hasOptionsFilter,
       onSelected,
       ...props
     },
@@ -41,6 +45,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const [selectedValue, setSelectedValue] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const localRef = useRef<HTMLInputElement | null>(null);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+    const [optionFilterValue, setOptionFilterValue] = useState('');
+
+    const deferredOptions = useDeferredValue(optionFilterValue);
+
+    const filteredOptions = useMemo(() => {
+      if (!hasOptionsFilter) return options;
+      return options?.filter((option) =>
+        option.value.toLowerCase().includes(deferredOptions.toLowerCase()),
+      );
+    }, [hasOptionsFilter, options, deferredOptions]);
 
     useEffect(() => {
       const localInput = document.getElementById(id) as HTMLInputElement;
@@ -48,6 +64,25 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         localRef.current = localInput;
       }
     }, [id]);
+
+    useEffect(() => {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          dropdownRef.current &&
+          !dropdownRef.current.contains(event.target as Node)
+        ) {
+          setDropdownOpen(false);
+        }
+      };
+
+      if (isDropdownOpen) {
+        document.addEventListener('mousedown', handleClickOutside);
+      }
+
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, [isDropdownOpen]);
 
     const handleSelect = (value: string) => {
       setSelectedValue(value);
@@ -86,7 +121,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           })}
         >
           {options ? (
-            <div className={cn('input__options-wrapper')}>
+            <div className={cn('input__options-wrapper')} ref={dropdownRef}>
               <input
                 id={id}
                 ref={ref}
@@ -104,7 +139,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               />
               {isDropdownOpen && (
                 <ul className={cn('input__dropdown-list')}>
-                  {options.map((option) => (
+                  <li className={cn('input__dropdown-filter-container')}>
+                    {hasOptionsFilter && (
+                      <input
+                        type="text"
+                        className={cn('input__dropdown-filter')}
+                        placeholder="Регион, город, населенный пункт"
+                        value={optionFilterValue}
+                        onChange={(e) => setOptionFilterValue(e.target.value)}
+                      />
+                    )}
+                    <span className={cn('input__dropdown-filter-icon')}>
+                      <icons.Magnifier />
+                    </span>
+                  </li>
+                  {filteredOptions.map((option) => (
                     <li
                       key={option.value}
                       className={cn('input__dropdown-item')}

@@ -8,6 +8,7 @@ import Note from './Note';
 import Eye from './Eye';
 import EyeOff from './EyeOff';
 import ResetPassword from './ResetPassword';
+import Magnifier from './Magnifier';
 
 const icons = {
   ArrowUp,
@@ -20,6 +21,7 @@ const icons = {
   Eye,
   EyeOff,
   ResetPassword,
+  Magnifier,
 };
 
 export default icons;

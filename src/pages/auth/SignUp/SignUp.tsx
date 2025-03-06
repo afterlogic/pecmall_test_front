@@ -9,27 +9,9 @@ import Logo from '@src/assets/images/pecmall-testovoe.svg';
 import icons from '@src/assets/icons';
 
 import styles from './SignUp.module.scss';
+import { mockRegions } from './mock-regions';
 
 const cn = classnames.bind(styles);
-
-const regionsMockData = [
-  { value: 'Магаданская область' },
-  { value: 'Москва и пригород' },
-  { value: 'Московская область' },
-  { value: 'Мурманская область' },
-  { value: 'Нижегородская область' },
-  { value: 'Новосибирская область' },
-  { value: 'Омская область' },
-  { value: 'Оренбургская область' },
-  { value: 'Орловская область' },
-  { value: 'Пензенская область' },
-  { value: 'Пермский край' },
-  { value: 'Приморский край' },
-  { value: 'Псковская область' },
-  { value: 'Ростовская область' },
-  { value: 'Рязанская область' },
-  { value: 'Самарская область' },
-];
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -184,8 +166,9 @@ const SignUp = () => {
             <Input
               placeholder="Выберите регион"
               type="text"
-              options={regionsMockData}
+              options={mockRegions}
               onChange={(e) => setRegion(e.target.value)}
+              hasOptionsFilter
             />
           </div>
 
