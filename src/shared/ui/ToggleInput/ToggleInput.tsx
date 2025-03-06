@@ -13,10 +13,10 @@ interface ToggleInputProps {
   name?: string;
   value?: string;
   containerClass?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: boolean | string) => void;
 }
 
-export const ToggleInput: React.FC<ToggleInputProps> = ({
+const ToggleInput: React.FC<ToggleInputProps> = ({
   checked = false,
   disabled = false,
   variant = 'checkbox',
@@ -40,7 +40,9 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
         disabled={disabled}
         name={name}
         value={value}
-        onChange={(e) => onChange && onChange(e.target.value)}
+        onChange={(e) =>
+          onChange && onChange(isRadio ? e.target.value : e.target.checked)
+        }
       />
       <span
         className={cn('toggle__wrapper', `toggle__wrapper-${variant}`, {
@@ -58,3 +60,5 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
     </label>
   );
 };
+
+export default ToggleInput;
