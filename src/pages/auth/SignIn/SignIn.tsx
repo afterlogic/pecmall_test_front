@@ -71,7 +71,8 @@ const SignIn = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'password'>,
   ) => {
-    field.onChange(e.target.value);
+    const value = e.target.value;
+    field.onChange(value.replace(/\s+/g, ''));
     clearErrors('email');
     clearErrors('password');
   };
@@ -80,7 +81,8 @@ const SignIn = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'email'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
+    const value = e.target.value;
+    field.onChange(value.replace(/\s+/g, ''));
     clearErrors('email');
     clearErrors('password');
   };

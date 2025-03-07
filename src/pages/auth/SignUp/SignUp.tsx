@@ -1,5 +1,10 @@
 import { useMemo, useState } from 'react';
-import { useForm, Controller, FieldErrors } from 'react-hook-form';
+import {
+  useForm,
+  Controller,
+  FieldErrors,
+  ControllerRenderProps,
+} from 'react-hook-form';
 import classnames from 'classnames/bind';
 import { useNavigate } from 'react-router-dom';
 import InputMask from 'react-input-mask';
@@ -114,6 +119,15 @@ const SignUp = () => {
   const handleChange = (field: any, e: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(e.target.value.trim());
     clearErrors(field.name);
+  };
+
+  const handleEmailChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FormValues, 'email'>,
+  ) => {
+    const value = e.target.value;
+    field.onChange(value.replace(/\s+/g, ''));
+    clearErrors('email');
   };
 
   const navigate = useNavigate();
@@ -332,7 +346,7 @@ const SignUp = () => {
                     placeholder="Электронная почта"
                     containerClass={cn('sign-in__input-container')}
                     autoComplete="firstName"
-                    onChange={(e) => handleChange(field, e)}
+                    onChange={(e) => handleEmailChange(e, field)}
                     error={errors.email?.message}
                     isFullWidth
                   />
