@@ -58,6 +58,11 @@ const ResetPassword = () => {
       await authApi.resetPassword({
         email: values.email,
       });
+
+      notify(
+        'Проверьте почту для восстановления доступа к вашему аккаунту.',
+        'success',
+      );
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const isBadGatewayError = checkError.isBadGatewayError(error);
