@@ -71,7 +71,8 @@ const SignIn = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'password'>,
   ) => {
-    field.onChange(e.target.value);
+    const value = e.target.value;
+    field.onChange(value.replace(/\s+/g, ''));
     clearErrors('email');
     clearErrors('password');
   };
@@ -80,7 +81,8 @@ const SignIn = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'email'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
+    const value = e.target.value;
+    field.onChange(value.replace(/\s+/g, ''));
     clearErrors('email');
     clearErrors('password');
   };
@@ -142,7 +144,7 @@ const SignIn = () => {
             name="email"
             control={control}
             rules={{
-              required: 'required',
+              required: 'Email обязателен',
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: 'Введите корректный email',
@@ -165,7 +167,7 @@ const SignIn = () => {
           <Controller
             name="password"
             control={control}
-            rules={{ required: 'Password is required' }}
+            rules={{ required: 'Пароль обязателен' }}
             render={({ field }) => (
               <Input
                 {...field}

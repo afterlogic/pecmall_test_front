@@ -50,7 +50,8 @@ const ResetPassword = () => {
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'email'>,
   ) => {
-    field.onChange(e.target.value.replace(/\s+/g, ''));
+    const value = e.target.value;
+    field.onChange(value.replace(/\s+/g, ''));
     clearErrors('email');
   };
 
@@ -115,7 +116,7 @@ const ResetPassword = () => {
             name="email"
             control={control}
             rules={{
-              required: 'required',
+              required: 'Email обязателен',
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: 'Введите корректный email',
