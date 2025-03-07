@@ -107,6 +107,7 @@ const SignUp = () => {
   const [isAcceptLicense, setAcceptLicense] = useState(false);
   const [isAcceptTerms, setAcceptTerms] = useState(false);
   const [region, setRegion] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (field: any, e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,6 +131,7 @@ const SignUp = () => {
       isAcceptTerms,
     });
     try {
+      setLoading(true);
       const payload = {
         userType,
         region,
@@ -158,6 +160,8 @@ const SignUp = () => {
           notify(error.message, 'error');
         }
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -692,6 +696,7 @@ const SignUp = () => {
               type="submit"
               onClick={handleSubmit(onSubmit)}
               disabled={!isSubmitEnabled}
+              loading={loading}
             />
           </div>
         </form>

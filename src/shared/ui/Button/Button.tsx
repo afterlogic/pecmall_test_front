@@ -46,8 +46,8 @@ const Button = ({
       disabled={loading || disabled}
       {...props}
     >
-      {buttonLeftIcon || null}
-      {loading && (
+      {(!loading && buttonLeftIcon) || null}
+      {loading ? (
         <div className={cn('Button__loader-wrapper')}>
           <div
             className={cn(
@@ -68,9 +68,10 @@ const Button = ({
             )}
           />
         </div>
+      ) : (
+        <span className={cn(`Button__text_disable: ${loading}`)}>{text}</span>
       )}
-      <span className={cn(`Button__text_disable: ${loading}`)}>{text}</span>
-      {buttonRightIcon || null}
+      {(!loading && buttonRightIcon) || null}
     </button>
   );
 };
