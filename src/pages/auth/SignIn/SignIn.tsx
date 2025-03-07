@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   useForm,
   SubmitHandler,
@@ -65,6 +65,8 @@ const SignIn = () => {
     return isEmailValid && isPasswordValid && emailPattern.test(values.email);
   }, [values, errors]);
 
+  const [loading, setLoading] = useState(false);
+
   const handlePasswordChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'password'>,
@@ -85,6 +87,7 @@ const SignIn = () => {
 
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     console.info('Submitting:', values);
+    setLoading(true);
     try {
       await auth.login({
         email: values.email,
@@ -106,6 +109,8 @@ const SignIn = () => {
         setError('email', { message: 'Неверные данные' });
         setError('password', { message: 'Неверные данные' });
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -184,6 +189,7 @@ const SignIn = () => {
               type="submit"
               onClick={handleSubmit(onSubmit)}
               disabled={!isSubmitEnabled}
+              loading={loading}
             />
             <div className={cn('sign-in__forgot-text')}>
               <span>Забыли пароль?</span>

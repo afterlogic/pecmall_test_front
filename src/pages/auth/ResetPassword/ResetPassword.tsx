@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import {
   useForm,
   Controller,
@@ -41,6 +41,8 @@ const ResetPassword = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleEmailChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: ControllerRenderProps<FormValues, 'email'>,
@@ -52,6 +54,7 @@ const ResetPassword = () => {
   const onSubmit = async (values: FormValues) => {
     console.info('Submitting:', values);
     try {
+      setLoading(true);
       await authApi.resetPassword({
         email: values.email,
       });
@@ -63,6 +66,8 @@ const ResetPassword = () => {
       } else {
         notify(error.message, 'error');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -130,6 +135,7 @@ const ResetPassword = () => {
             type="submit"
             disabled={!isSubmitEnabled}
             onClick={handleSubmit(onSubmit)}
+            loading={loading}
           />
         </form>
       </div>
