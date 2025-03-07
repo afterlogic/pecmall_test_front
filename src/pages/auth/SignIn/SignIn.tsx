@@ -165,7 +165,7 @@ const SignIn = () => {
           <Controller
             name="password"
             control={control}
-            rules={{ required: 'Password is required' }}
+            rules={{ required: 'Пароль обязателен' }}
             render={({ field }) => (
               <Input
                 {...field}
