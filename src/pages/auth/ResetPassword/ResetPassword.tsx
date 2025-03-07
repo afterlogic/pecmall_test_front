@@ -115,7 +115,7 @@ const ResetPassword = () => {
             name="email"
             control={control}
             rules={{
-              required: 'required',
+              required: 'Email обязателен',
               pattern: {
                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: 'Введите корректный email',

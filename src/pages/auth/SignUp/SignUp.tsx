@@ -319,7 +319,7 @@ const SignUp = () => {
                 name="email"
                 control={control}
                 rules={{
-                  required: 'required',
+                  required: 'Email обязателен',
                   pattern: {
                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                     message: 'Введите корректный email',
@@ -343,7 +343,7 @@ const SignUp = () => {
                 name="phone"
                 control={control}
                 rules={{
-                  required: 'required',
+                  required: 'Телефон обязателен',
                   validate: (value) => {
                     const rawValue = normalizePhone(value);
                     return (

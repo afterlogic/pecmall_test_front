@@ -125,7 +125,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className={cn('input__options-wrapper')} ref={dropdownRef}>
               <input
                 id={id}
-                ref={mergedRef} // Используем объединённый ref
+                ref={mergedRef}
                 type={type}
                 className={cn('input__field', 'input__dropdown', {
                   input__field_error: !!error,
@@ -139,38 +139,40 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 onClick={toggleIconDropdown}
               />
               {isDropdownOpen && (
-                <ul className={cn('input__dropdown-list')}>
-                  <li className={cn('input__dropdown-filter-container')}>
-                    {hasOptionsFilter && (
-                      <input
-                        type="text"
-                        className={cn('input__dropdown-filter')}
-                        placeholder="Регион, город, населенный пункт"
-                        value={optionFilterValue}
-                        onChange={(e) => setOptionFilterValue(e.target.value)}
-                      />
-                    )}
-                    <span className={cn('input__dropdown-filter-icon')}>
-                      <icons.Magnifier />
-                    </span>
-                  </li>
-                  {filteredOptions.map((option) => (
-                    <li
-                      key={option.value}
-                      className={cn('input__dropdown-item')}
-                      onClick={() => handleSelect(option.value)}
-                    >
-                      {option.value}
+                <div className={cn('input__dropdown-list-wrapper')}>
+                  <ul className={cn('input__dropdown-list')}>
+                    <li className={cn('input__dropdown-filter-container')}>
+                      {hasOptionsFilter && (
+                        <input
+                          type="text"
+                          className={cn('input__dropdown-filter')}
+                          placeholder="Регион, город, населенный пункт"
+                          value={optionFilterValue}
+                          onChange={(e) => setOptionFilterValue(e.target.value)}
+                        />
+                      )}
+                      <span className={cn('input__dropdown-filter-icon')}>
+                        <icons.Magnifier />
+                      </span>
                     </li>
-                  ))}
-                </ul>
+                    {filteredOptions.map((option) => (
+                      <li
+                        key={option.value}
+                        className={cn('input__dropdown-item')}
+                        onClick={() => handleSelect(option.value)}
+                      >
+                        {option.value}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
           ) : (
             <div className={cn('input__content-wrapper')}>
               <input
                 id={id}
-                ref={mergedRef} // Используем объединённый ref
+                ref={mergedRef}
                 type={
                   type === 'password'
                     ? showPassword

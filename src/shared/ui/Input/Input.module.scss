@@ -91,12 +91,17 @@
     transition: border-color 0.3s ease;
   }
 
-  &__dropdown-list {
+  &__dropdown-list-wrapper {
     position: absolute;
     z-index: 10;
     top: 100%;
     left: 0;
 
+    width: 100%;
+    padding-bottom: 30px;
+  }
+
+  &__dropdown-list {
     overflow: auto;
 
     width: 100%;
