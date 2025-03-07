@@ -6,7 +6,12 @@ import Router from './app/routes/Router';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter
+      future={{
+        v7_relativeSplatPath: true,
+        v7_startTransition: true,
+      }}
+    >
       <Router />
     </BrowserRouter>
   );
