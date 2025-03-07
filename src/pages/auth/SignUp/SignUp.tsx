@@ -71,6 +71,7 @@ const SignUp = () => {
     watch,
     clearErrors,
     formState: { errors },
+    reset,
   } = useForm<FormValues>({
     defaultValues: {
       email: '',
@@ -148,6 +149,10 @@ const SignUp = () => {
 
       await authApi.signUp(payload);
       notify('Регистрация прошла успешно', 'success');
+
+      reset();
+
+      navigate('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const isBadGatewayError = checkError.isBadGatewayError(error);
