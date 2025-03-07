@@ -14,6 +14,7 @@ import icons from '@src/assets/icons';
 import authApi from '@src/app/api/authApi';
 import { checkError } from '@src/shared/utils/checkError';
 import { notify } from '@src/shared/utils/toast';
+import { useNavigate } from 'react-router-dom';
 
 import styles from './ResetPassword.module.scss';
 
@@ -42,6 +43,8 @@ const ResetPassword = () => {
   });
 
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleEmailChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,6 +77,10 @@ const ResetPassword = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSignIn = () => {
+    navigate('/');
   };
 
   const values = watch();
@@ -143,6 +150,15 @@ const ResetPassword = () => {
             loading={loading}
           />
         </form>
+      </div>
+
+      <div className={cn('reset-password__bottom-text')}>
+        <a
+          className={cn('reset-password__bottom-text_link')}
+          onClick={handleSignIn}
+        >
+          Войти
+        </a>
       </div>
     </div>
   );
