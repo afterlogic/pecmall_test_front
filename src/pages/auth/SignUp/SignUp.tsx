@@ -1,12 +1,8 @@
 import { useMemo, useState } from 'react';
-import {
-  useForm,
-  Controller,
-  FieldErrors,
-  ControllerRenderProps,
-} from 'react-hook-form';
+import { useForm, Controller, FieldErrors } from 'react-hook-form';
 import classnames from 'classnames/bind';
 import { useNavigate } from 'react-router-dom';
+import InputMask from 'react-input-mask';
 import Button from '@src/shared/ui/Button';
 import ToggleInput from '@src/shared/ui/ToggleInput';
 import Input from '@src/shared/ui/Input';
@@ -43,7 +39,6 @@ interface FormValues {
     ogrn: string;
     okpo: string;
   };
-
   legalAddress?: {
     postalCode: string;
     country: string;
@@ -113,52 +108,10 @@ const SignUp = () => {
   const [isAcceptTerms, setAcceptTerms] = useState(false);
   const [region, setRegion] = useState('');
 
-  const handleEmailChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'email'>,
-  ) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleChange = (field: any, e: React.ChangeEvent<HTMLInputElement>) => {
     field.onChange(e.target.value.trim());
-    clearErrors('email');
-  };
-
-  const handleNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'firstName'>,
-  ) => {
-    field.onChange(e.target.value.trim());
-    clearErrors('firstName');
-  };
-
-  const handleSurnameChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'lastName'>,
-  ) => {
-    field.onChange(e.target.value.trim());
-    clearErrors('lastName');
-  };
-
-  const handleFatherNameChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'patronimicName'>,
-  ) => {
-    field.onChange(e.target.value.trim());
-    clearErrors('patronimicName');
-  };
-
-  const handlePhoneChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<FormValues, 'phone'>,
-  ) => {
-    field.onChange(e.target.value.trim());
-    clearErrors('phone');
-  };
-
-  const handleAcceptTermsChange = () => {
-    setAcceptTerms(!isAcceptTerms);
-  };
-
-  const handleAcceptLicenseChange = () => {
-    setAcceptLicense(!isAcceptLicense);
+    clearErrors(field.name);
   };
 
   const navigate = useNavigate();
@@ -166,6 +119,8 @@ const SignUp = () => {
   const handleSignIn = () => {
     navigate('/');
   };
+
+  const normalizePhone = (phone: string) => phone.replace(/\D/g, '');
 
   const onSubmit = async (values: FormValues) => {
     console.info('Submitting:', values, {
@@ -182,7 +137,7 @@ const SignUp = () => {
         firstName: values.firstName,
         lastName: values.lastName,
         patronimicName: values.patronimicName,
-        phone: values.phone,
+        phone: normalizePhone(values.phone),
         ...(userType !== false && {
           companyData: values.companyData,
           legalAddress: values.legalAddress,
@@ -215,7 +170,7 @@ const SignUp = () => {
     const isFatherNameValid = validationRules.patronimicName(values, errors);
     const isPhoneValid = validationRules.phone(values, errors);
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phonePattern = /^(\+7|8)[0-9]{10}$/;
+    const phonePattern = /^[78][0-9]{10}$/;
 
     const needExtendData =
       userType === true
@@ -248,7 +203,7 @@ const SignUp = () => {
       isAcceptLicense &&
       isAcceptTerms &&
       emailPattern.test(values.email) &&
-      phonePattern.test(values.phone) &&
+      phonePattern.test(normalizePhone(values.phone)) &&
       needExtendData
     );
   }, [values, errors, userType, isAcceptLicense, isAcceptTerms]);
@@ -277,7 +232,6 @@ const SignUp = () => {
                 checked={userType === false}
                 onChange={() => setUserType(false)}
               />
-
               <p>Физическое лицо</p>
             </div>
             <div className={cn('sign-up__toggle-wrapper')}>
@@ -287,7 +241,6 @@ const SignUp = () => {
                 checked={userType === true}
                 onChange={() => setUserType(true)}
               />
-
               <p>Юридическое лицо</p>
             </div>
           </div>
@@ -308,7 +261,7 @@ const SignUp = () => {
                     containerClass={cn('sign-up__input-container')}
                     type="text"
                     error={errors.firstName?.message}
-                    onChange={(e) => handleNameChange(e, field)}
+                    onChange={(e) => handleChange(field, e)}
                     isFullWidth
                   />
                 )}
@@ -326,7 +279,7 @@ const SignUp = () => {
                     error={errors.firstName?.message}
                     isFullWidth
                     placeholder="Фамилия"
-                    onChange={(e) => handleSurnameChange(e, field)}
+                    onChange={(e) => handleChange(field, e)}
                   />
                 )}
               />
@@ -341,7 +294,7 @@ const SignUp = () => {
                     containerClass={cn('sign-up__input-container')}
                     type="text"
                     error={errors.firstName?.message}
-                    onChange={(e) => handleFatherNameChange(e, field)}
+                    onChange={(e) => handleChange(field, e)}
                     isFullWidth
                     placeholder="Отчество"
                   />
@@ -370,7 +323,7 @@ const SignUp = () => {
                     placeholder="Электронная почта"
                     containerClass={cn('sign-in__input-container')}
                     autoComplete="firstName"
-                    onChange={(e) => handleEmailChange(e, field)}
+                    onChange={(e) => handleChange(field, e)}
                     error={errors.email?.message}
                     isFullWidth
                   />
@@ -382,21 +335,34 @@ const SignUp = () => {
                 control={control}
                 rules={{
                   required: 'required',
-                  pattern: {
-                    value: /^(\+7|8)[0-9]{10}$/,
-                    message: 'Введите корректный телефон',
+                  validate: (value) => {
+                    const rawValue = normalizePhone(value);
+                    return (
+                      /^[78][0-9]{10}$/.test(rawValue) ||
+                      'Введите корректный телефон'
+                    );
                   },
                 }}
                 render={({ field }) => (
-                  <Input
+                  <InputMask
+                    mask="+7 (999) 999-99-99"
                     {...field}
-                    type="tel"
-                    placeholder="Номер телефона"
-                    containerClass={cn('sign-in__input-container')}
-                    onChange={(e) => handlePhoneChange(e, field)}
-                    error={errors.email?.message}
-                    isFullWidth
-                  />
+                    onChange={(e) => {
+                      const rawValue = normalizePhone(e.target.value);
+                      field.onChange(rawValue);
+                    }}
+                  >
+                    {(inputProps) => (
+                      <Input
+                        {...inputProps}
+                        type="tel"
+                        placeholder="Номер телефона"
+                        containerClass={cn('sign-in__input-container')}
+                        error={errors.email?.message}
+                        isFullWidth
+                      />
+                    )}
+                  </InputMask>
                 )}
               />
             </div>
@@ -415,6 +381,7 @@ const SignUp = () => {
               options={mockRegions}
               value={region}
               onSelected={setRegion}
+              onChange={(e) => setRegion(e.target.value)}
               hasOptionsFilter
             />
           </div>
@@ -694,7 +661,7 @@ const SignUp = () => {
             <ToggleInput
               checked={isAcceptLicense}
               variant="checkbox"
-              onChange={handleAcceptLicenseChange}
+              onChange={() => setAcceptLicense(!isAcceptLicense)}
             />
             <div className={cn('sign-up__license-text')}>
               <a className={cn('sign-up__license-text_link')}>C Условиями</a>
@@ -706,7 +673,7 @@ const SignUp = () => {
             <ToggleInput
               checked={isAcceptTerms}
               variant="checkbox"
-              onChange={handleAcceptTermsChange}
+              onChange={() => setAcceptTerms(!isAcceptTerms)}
             />
             <div className={cn('sign-up__license-text')}>
               <span>

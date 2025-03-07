@@ -51,18 +51,20 @@ http.interceptors.response.use(
         return http(request);
       }
 
-      if (error.response?.status === 401) {
-        if (!refreshPromise) {
-          refreshPromise = helpers.resetAuthToken();
-        }
-        const isRefreshed = await refreshPromise;
-        refreshPromise = null;
-        if (!isRefreshed) {
-          throw error;
-        }
-        request.headers.authorization = getAuthString();
-        return http(request);
-      }
+      // TODO: when add when add refresh http-only
+
+      // if (error.response?.status === 401) {
+      //   if (!refreshPromise) {
+      //     refreshPromise = helpers.resetAuthToken();
+      //   }
+      //   const isRefreshed = await refreshPromise;
+      //   refreshPromise = null;
+      //   if (!isRefreshed) {
+      //     throw error;
+      //   }
+      //   request.headers.authorization = getAuthString();
+      //   return http(request);
+      // }
     } catch (err) {
       console.error(err);
       helpers.logOut();
@@ -71,6 +73,6 @@ http.interceptors.response.use(
   },
 );
 
-let refreshPromise: Promise<boolean> | null = null;
+// let refreshPromise: Promise<boolean> | null = null;
 
 export default http;

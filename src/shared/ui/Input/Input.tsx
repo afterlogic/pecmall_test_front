@@ -48,7 +48,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     const [optionFilterValue, setOptionFilterValue] = useState('');
-
     const deferredOptions = useDeferredValue(optionFilterValue);
 
     const filteredOptions = useMemo(() => {
@@ -58,12 +57,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       );
     }, [hasOptionsFilter, options, deferredOptions]);
 
-    useEffect(() => {
-      const localInput = document.getElementById(id) as HTMLInputElement;
-      if (localInput) {
-        localRef.current = localInput;
+    const mergedRef = (node: HTMLInputElement | null) => {
+      localRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
       }
-    }, [id]);
+    };
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
@@ -124,7 +125,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className={cn('input__options-wrapper')} ref={dropdownRef}>
               <input
                 id={id}
-                ref={ref}
+                ref={mergedRef} // Используем объединённый ref
                 type={type}
                 className={cn('input__field', 'input__dropdown', {
                   input__field_error: !!error,
@@ -169,7 +170,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className={cn('input__content-wrapper')}>
               <input
                 id={id}
-                ref={ref}
+                ref={mergedRef} // Используем объединённый ref
                 type={
                   type === 'password'
                     ? showPassword
